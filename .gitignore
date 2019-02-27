@@ -2,3 +2,6 @@
 *.txt
 Caida/.ipynb_checkpoints/Exploration-checkpoint.ipynb
 .DS_Store
+*.gz
+Ripple/txs-parsed-jan-2013-aug-2017/.ipynb_checkpoints/Ripple-Exploration-checkpoint.ipynb
+Ripple/.ipynb_checkpoints/Ripple-Exploration-checkpoint.ipynb
