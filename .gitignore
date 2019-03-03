@@ -5,3 +5,7 @@ Caida/.ipynb_checkpoints/Exploration-checkpoint.ipynb
 *.gz
 Ripple/txs-parsed-jan-2013-aug-2017/.ipynb_checkpoints/Ripple-Exploration-checkpoint.ipynb
 Ripple/.ipynb_checkpoints/Ripple-Exploration-checkpoint.ipynb
+.ipynb_checkpoints/find_match-checkpoint.ipynb
+*.pyc
+Ripple/.ipynb_checkpoints/Topology-Exploration-checkpoint.ipynb
+Ripple/.ipynb_checkpoints/Transactions-Exploration-checkpoint.ipynb
