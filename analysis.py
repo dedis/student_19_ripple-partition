@@ -78,7 +78,7 @@ def build_graphs(filename_ripple, filename_caida):
 ## Retrieve transactions
 def get_transactions(filename):
     transactions = pd.read_csv(filename, dtype={'sender': str, 'receiver': str, 'amount': np.float64} )
-    transactions = transactions[['sender','receiver','amount']]
+    transactions = transactions[['sender','receiver','amount','date']]
     return transactions
 
 ## tie_breaker
