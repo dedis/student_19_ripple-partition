@@ -136,10 +136,12 @@ def replay_transactions_remove(transactions, corrupted_graph, complete_graph, be
     amount_ok = 0
     amount_lost = 0
     amount_rerouted = 0
+    
+    flatten_transactions = transactions.groupby(['sender','receiver'])['amount'].sum().to_frame()
         
-    for index, row in transactions.iterrows():
-        sender = row['sender']
-        receiver = row['receiver']
+    for index, row in flatten_transactions.iterrows():
+        sender = index[0]
+        receiver = index[1]
         try :
             amount = row['amount']
             path_corrupted = select_best(sender,receiver,corrupted_graph)
@@ -177,9 +179,12 @@ def replay_transactions_hijack(transactions, corrupted_node, complete_graph, bes
     amount_ok = 0
     amount_lost = 0
     amount_rerouted = 0
-    for index, row in transactions.iterrows():
-        sender = row['sender']
-        receiver = row['receiver']
+    
+    flatten_transactions = transactions.groupby(['sender','receiver'])['amount'].sum().to_frame()
+    
+    for index, row in flatten_transactions.iterrows():
+        sender = index[0]
+        receiver = index[1]
         
         if(corrupted_node != sender and corrupted_node != receiver):
             try :
