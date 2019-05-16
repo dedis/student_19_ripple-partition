@@ -19,7 +19,7 @@ def recover_ripple(filename):
     ripple_graph.add_nodes_from(ases)
     return ripple_graph
 
-## Recover Caida Graph
+## Recover Caida Graph
 def recover_caida(filename):
     data = pd.read_csv(filename,delimiter='\n', comment='#', header=None, encoding='ISO-8859-1')
 
@@ -53,7 +53,7 @@ def recover_caida(filename):
 
     return caida_graph, caida_links
 
-## Add intermediary nodes to ripple
+## Add intermediary nodes to ripple
 def build_ripple_from_caida(ripple_graph, caida_graph):
     ripple_ases = list(ripple_graph.nodes).copy()
     for s in ripple_ases:
@@ -73,8 +73,8 @@ def build_graphs(filename_ripple, filename_caida):
     ripple_graph = recover_ripple(filename_ripple)
     caida_graph, caida_links = recover_caida(filename_caida)
     ripple_graph_final = build_ripple_from_caida(ripple_graph, caida_graph)
-    return ripple_graph_final, caida_graph, caida_links
-
+    return ripple_graph_final, caida_graph, list(ripple_graph.nodes)
+                                                
 ## Retrieve transactions
 def get_transactions(filename):
     transactions = pd.read_csv(filename, dtype={'sender': str, 'receiver': str, 'amount': np.float64} )
@@ -132,7 +132,7 @@ def compute_best_paths(ripple_graph):
                 best_paths[(source,dest)] = path
     return best_paths
 
-def replay_transactions_remove(transactions, corrupted_graph, complete_graph):
+def replay_transactions_remove(transactions, corrupted_graph, complete_graph, best_paths):
     amount_ok = 0
     amount_lost = 0
     amount_rerouted = 0
@@ -155,18 +155,25 @@ def replay_transactions_remove(transactions, corrupted_graph, complete_graph):
             amount_lost += amount
     return amount_ok, amount_lost, amount_rerouted
 
-def generate_remove_analysis(ripple_graph, transactions):
+def generate_remove_analysis(ripple_graph, transactions, gateways, best_paths):
     df_corrupted = pd.DataFrame(columns=['corrupted', 'amount_ok', 'amount_lost', 'amount_rerouted'])
-    for c in ripple_graph.nodes:
+    intermediaries = set()
+    for source in gateways:
+        for dest in gateways:
+            if(source != dest):
+                path = best_paths[(source,dest)]
+                intermediaries.update(path)
+         
+    for c in intermediaries:
         corrupted_graph = ripple_graph.copy()
         corrupted_graph.remove_node(c)
-        amount_ok, amount_lost, amount_rerouted = replay_transactions_remove(transactions, corrupted_graph, ripple_graph)
+        amount_ok, amount_lost, amount_rerouted = replay_transactions_remove(transactions, corrupted_graph, ripple_graph, best_paths)
         df_corrupted = df_corrupted.append({'corrupted': c, 'amount_ok': amount_ok, 'amount_lost': amount_lost, 'amount_rerouted': amount_rerouted}, ignore_index=True)
 
     return df_corrupted
 
 
-def replay_transactions_hijack(transactions, corrupted_node, complete_graph):
+def replay_transactions_hijack(transactions, corrupted_node, complete_graph, best_paths):
     amount_ok = 0
     amount_lost = 0
     amount_rerouted = 0
@@ -193,10 +200,10 @@ def replay_transactions_hijack(transactions, corrupted_node, complete_graph):
                 amount_lost += amount
     return amount_ok, amount_lost, amount_rerouted
 
-def generate_hijack_analysis(ripple_graph, transactions):
+def generate_hijack_analysis(ripple_graph, transactions, best_paths):
     df_corrupted = pd.DataFrame(columns=['corrupted', 'amount_ok', 'amount_lost', 'amount_rerouted'])
     for c in ripple_graph.nodes:
-        amount_ok, amount_lost, amount_rerouted = replay_transactions_hijack(transactions, c, ripple_graph)
+        amount_ok, amount_lost, amount_rerouted = replay_transactions_hijack(transactions, c, ripple_graph, best_paths)
         df_corrupted = df_corrupted.append({'corrupted': c, 'amount_ok': amount_ok, 'amount_lost': amount_lost, 'amount_rerouted': amount_rerouted}, ignore_index=True)
 
     return df_corrupted
