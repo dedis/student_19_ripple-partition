@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 import networkx as nx
 import csv
+pd.options.mode.chained_assignment = None 
 
 ## Recover Ripple Graph
 def recover_ripple(filename):
