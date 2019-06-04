@@ -72,9 +72,10 @@ def build_ripple_from_caida(ripple_graph, caida_graph):
 
 def build_graphs(filename_ripple, filename_caida):
     ripple_graph = recover_ripple(filename_ripple)
+    gateways = list(ripple_graph.nodes)
     caida_graph, caida_links = recover_caida(filename_caida)
     ripple_graph_final = build_ripple_from_caida(ripple_graph, caida_graph)
-    return ripple_graph_final, caida_graph, list(ripple_graph.nodes)
+    return ripple_graph_final, caida_graph, gateways
                                                 
 ## Retrieve transactions
 def get_transactions(filename):
