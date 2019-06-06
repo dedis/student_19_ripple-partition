@@ -167,8 +167,8 @@ def generate_remove_analysis(ripple_graph, transactions, gateways, best_paths):
             if(source != dest):
                 path = best_paths[(source,dest)]
                 intermediaries.update(path)
-         
-    for c in intermediaries:
+
+    for c in ripple_graph.nodes:
         corrupted_graph = ripple_graph.copy()
         corrupted_graph.remove_node(c)
         amount_ok, amount_lost, amount_rerouted = replay_transactions_remove(transactions, corrupted_graph, ripple_graph, best_paths)
