@@ -11,6 +11,7 @@ The code related to the report and the presentation can be found in the master b
 2) Ripple contains the processing of the Ripple API (gateways, transactions, exchange rate) <br>
 3) Gephi contains the processing to display the graph on a map <br>
 4) report contains the report and the presentation <br>
+
 All the notebooks are already executed, you can see them directly on github. Each notebook contains a step-by-step explaination of my process. <br>
 <br>
 Since this project is mostly a data analysis project, an important job of exploration has been done. If you want to go more into the details of my exploration. You can access this link on the data_exploration branch https://github.com/dedis/student_19_ripple-partition/tree/ca3e40b48f9e344fad1cf57d41cbb508ba234e88. If you want to understand how I lead my project, you can access this google doc https://docs.google.com/document/d/1WRk7rECmT47KmHcoyUY3uNxciVELF7ARVYRz7mfUr4E/edit
